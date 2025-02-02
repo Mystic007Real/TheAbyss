@@ -38,6 +38,24 @@
             margin: 10px;
             width: 300px;
         }
+        .form-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+        }
+        .form-popup input, .form-popup select {
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
@@ -51,24 +69,78 @@
         <div class="product">
             <h2>$5 - Basic Package</h2>
             <p>Includes some games and access to 2 public proxy websites.</p>
-            <button class="btn">Buy Now</button>
+            <button class="btn" onclick="openForm('$5 - Basic Package')">Buy Now</button>
         </div>
         <div class="product">
             <h2>$10 - Standard Package</h2>
             <p>Includes games and access to The Underground (proxy vault).</p>
-            <button class="btn">Buy Now</button>
+            <button class="btn" onclick="openForm('$10 - Standard Package')">Buy Now</button>
         </div>
         <div class="product">
             <h2>$20 - Premium Package</h2>
             <p>Includes everything: many games, The Underground, bypass methods, tutorials, and future content.</p>
-            <button class="btn">Buy Now</button>
+            <button class="btn" onclick="openForm('$20 - Premium Package')">Buy Now</button>
         </div>
+    </div>
+    
+    <div class="form-popup" id="requestForm">
+        <h2>Request Application</h2>
+        <form id="requestFormElement">
+            <label>Name:</label>
+            <input type="text" id="name" required>
+            <label>Grade:</label>
+            <select id="grade">
+                <option value="6th">6th Grade</option>
+                <option value="7th">7th Grade</option>
+                <option value="8th">8th Grade</option>
+            </select>
+            <label>Team:</label>
+            <select id="team">
+                <option value="Lead">Lead</option>
+                <option value="Dream">Dream</option>
+                <option value="Innovate">Innovate</option>
+            </select>
+            <button type="button" class="btn" onclick="submitRequest()">Submit</button>
+            <button type="button" class="btn" onclick="closeForm()">Close</button>
+        </form>
     </div>
     
     <script>
         function enterSite() {
             document.getElementById('welcome-screen').classList.add('hidden');
             document.getElementById('store').classList.remove('hidden');
+        }
+
+        function openForm(product) {
+            document.getElementById('requestForm').style.display = 'block';
+            document.getElementById('requestFormElement').dataset.product = product;
+        }
+
+        function closeForm() {
+            document.getElementById('requestForm').style.display = 'none';
+        }
+
+        function submitRequest() {
+            const name = document.getElementById('name').value;
+            const grade = document.getElementById('grade').value;
+            const team = document.getElementById('team').value;
+            const product = document.getElementById('requestFormElement').dataset.product;
+            
+            if (!["6th", "7th", "8th"].includes(grade)) {
+                alert("Invalid grade.");
+                return;
+            }
+            
+            if (!["Lead", "Dream", "Innovate"].includes(team)) {
+                alert("Invalid team.");
+                return;
+            }
+            
+            const mailtoLink = `mailto:jrhatcher@students.wcpss.net?subject=Request for ${product}&body=Name: ${name}%0D%0AGrade: ${grade}%0D%0ATeam: ${team}`;
+            window.location.href = mailtoLink;
+            
+            alert("Request sent! I will try to get to you as soon as possible.");
+            closeForm();
         }
     </script>
 </body>
