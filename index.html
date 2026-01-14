@@ -67,6 +67,7 @@
                 top: auto;
                 left: auto;
                 transform: none;
+                background-color: #444;
             }
             50% {
                 position: fixed;
@@ -75,6 +76,7 @@
                 width: 100vw;
                 height: auto; /* Keep original height */
                 transform: translateY(-50%);
+                background-color: #444;
             }
             100% {
                 position: fixed;
@@ -83,10 +85,20 @@
                 width: 100vw;
                 height: 100vh;
                 transform: none;
+                background-color: transparent; /* Become transparent to reveal store */
             }
         }
         .btn.hide-text {
             color: transparent; /* Hide text */
+        }
+        /* Fade in animation for store */
+        .store-fade-in {
+            animation: fadeIn 1s ease-in-out forwards;
+            opacity: 0; /* Start invisible */
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
         .product {
             border: 1px solid white;
@@ -164,14 +176,19 @@
     <script>
         function enterSite() {
             const btn = document.querySelector('#welcome-screen .btn');
+            const store = document.getElementById('store');
             // Disable further clicks during animation
             btn.onclick = null;
+            // Show store and start fade-in
+            store.classList.remove('hidden');
+            store.classList.add('store-fade-in');
             // Hide text and start expansion
             btn.classList.add('hide-text', 'expanding');
             setTimeout(() => {
-                // Hide welcome screen and show store
+                // Hide welcome screen
                 document.getElementById('welcome-screen').classList.add('hidden');
-                document.getElementById('store').classList.remove('hidden');
+                // Remove fade-in class (opacity is now 1)
+                store.classList.remove('store-fade-in');
                 // Reset button classes
                 btn.classList.remove('hide-text', 'expanding');
                 // Re-enable click if needed, but since hidden, not necessary
