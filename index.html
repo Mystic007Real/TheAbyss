@@ -22,19 +22,19 @@
             display: none;
         }
         .btn {
-            background-color: #444;
+            background-color: transparent; /* No fill, just outline */
             color: white;
             padding: 10px 20px;
-            border: none;
+            border: 2px solid white; /* White outline */
             cursor: pointer;
             margin-top: 20px;
             position: relative;
             overflow: hidden;
-            border-radius: 50px; /* Rounded button */
-            transition: background-color 0.3s ease; /* For hover */
+            border-radius: 50px; /* Rounded outline */
+            transition: background-color 0.3s ease; /* For hover, if needed */
         }
         .btn:hover {
-            background-color: #666;
+            background-color: rgba(255, 255, 255, 0.1); /* Slight hover effect */
         }
         /* Shimmer effect for the Enter button only */
         #welcome-screen .btn::before {
@@ -51,15 +51,15 @@
             0% { left: -100%; }
             100% { left: 100%; }
         }
-        /* Expansion animation */
+        /* Expansion and fade animation */
         .btn.expanding {
-            animation: expandButton 1s ease-in-out forwards;
+            animation: expandAndFade 1s ease-in-out forwards;
             border-radius: 50px; /* Keep rounded */
         }
         .btn.expanding::before {
             display: none; /* Hide shimmer during expansion */
         }
-        @keyframes expandButton {
+        @keyframes expandAndFade {
             0% {
                 position: relative;
                 width: auto;
@@ -67,7 +67,8 @@
                 top: auto;
                 left: auto;
                 transform: none;
-                background-color: #444;
+                opacity: 1;
+                border-color: white;
             }
             50% {
                 position: fixed;
@@ -76,7 +77,8 @@
                 width: 100vw;
                 height: auto; /* Keep original height */
                 transform: translateY(-50%);
-                background-color: #444;
+                opacity: 0.5; /* Halfway fade */
+                border-color: rgba(255, 255, 255, 0.5);
             }
             100% {
                 position: fixed;
@@ -85,20 +87,12 @@
                 width: 100vw;
                 height: 100vh;
                 transform: none;
-                background-color: transparent; /* Become transparent to reveal store */
+                opacity: 0; /* Fully faded */
+                border-color: transparent;
             }
         }
         .btn.hide-text {
             color: transparent; /* Hide text */
-        }
-        /* Fade in animation for store */
-        .store-fade-in {
-            animation: fadeIn 1s ease-in-out forwards;
-            opacity: 0; /* Start invisible */
-        }
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
         }
         .product {
             border: 1px solid white;
@@ -179,16 +173,13 @@
             const store = document.getElementById('store');
             // Disable further clicks during animation
             btn.onclick = null;
-            // Show store and start fade-in
+            // Show store immediately (behind the button)
             store.classList.remove('hidden');
-            store.classList.add('store-fade-in');
-            // Hide text and start expansion
+            // Hide text and start expansion with fade
             btn.classList.add('hide-text', 'expanding');
             setTimeout(() => {
                 // Hide welcome screen
                 document.getElementById('welcome-screen').classList.add('hidden');
-                // Remove fade-in class (opacity is now 1)
-                store.classList.remove('store-fade-in');
                 // Reset button classes
                 btn.classList.remove('hide-text', 'expanding');
                 // Re-enable click if needed, but since hidden, not necessary
