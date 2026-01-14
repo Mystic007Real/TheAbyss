@@ -28,9 +28,44 @@
             border: none;
             cursor: pointer;
             margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 50px; /* Rounded button */
+            transition: background-color 0.3s ease; /* For hover */
         }
         .btn:hover {
             background-color: #666;
+        }
+        /* Shimmer effect for the Enter button only */
+        #welcome-screen .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        /* Expansion animation classes */
+        .btn.expand-width {
+            position: fixed !important;
+            top: 50% !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: auto !important; /* Keep original height */
+            transform: translateY(-50%) !important;
+            border-radius: 0 !important;
+            transition: all 0.5s ease;
+        }
+        .btn.expand-full {
+            height: 100vh !important;
+            top: 0 !important;
+            transform: none !important;
         }
         .product {
             border: 1px solid white;
@@ -107,8 +142,23 @@
     
     <script>
         function enterSite() {
-            document.getElementById('welcome-screen').classList.add('hidden');
-            document.getElementById('store').classList.remove('hidden');
+            const btn = document.querySelector('#welcome-screen .btn');
+            // Disable further clicks during animation
+            btn.onclick = null;
+            // Start expansion to full width (keeping height)
+            btn.classList.add('expand-width');
+            setTimeout(() => {
+                // Then expand to full height
+                btn.classList.add('expand-full');
+                setTimeout(() => {
+                    // Hide welcome screen and show store
+                    document.getElementById('welcome-screen').classList.add('hidden');
+                    document.getElementById('store').classList.remove('hidden');
+                    // Reset button classes
+                    btn.classList.remove('expand-width', 'expand-full');
+                    // Re-enable click if needed, but since hidden, not necessary
+                }, 500); // Match transition duration
+            }, 500); // Match transition duration
         }
 
         function openForm(product) {
