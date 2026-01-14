@@ -72,12 +72,12 @@
             }
             50% {
                 position: fixed;
-                top: 50%;
+                top: 25%; /* Center for half height */
                 left: 0;
                 width: 100vw;
-                height: auto; /* Keep original height */
-                transform: translateY(-50%);
-                opacity: 0.5; /* Halfway fade */
+                height: 50vh; /* Half height, expanding from center */
+                transform: none;
+                opacity: 0.5;
                 border-color: rgba(255, 255, 255, 0.5);
             }
             100% {
@@ -87,7 +87,7 @@
                 width: 100vw;
                 height: 100vh;
                 transform: none;
-                opacity: 0; /* Fully faded */
+                opacity: 0;
                 border-color: transparent;
             }
         }
