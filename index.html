@@ -51,21 +51,42 @@
             0% { left: -100%; }
             100% { left: 100%; }
         }
-        /* Expansion animation classes */
-        .btn.expand-width {
-            position: fixed !important;
-            top: 50% !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: auto !important; /* Keep original height */
-            transform: translateY(-50%) !important;
-            border-radius: 0 !important;
-            transition: all 0.5s ease;
+        /* Expansion animation */
+        .btn.expanding {
+            animation: expandButton 1s ease-in-out forwards;
+            border-radius: 50px; /* Keep rounded */
         }
-        .btn.expand-full {
-            height: 100vh !important;
-            top: 0 !important;
-            transform: none !important;
+        .btn.expanding::before {
+            display: none; /* Hide shimmer during expansion */
+        }
+        @keyframes expandButton {
+            0% {
+                position: relative;
+                width: auto;
+                height: auto;
+                top: auto;
+                left: auto;
+                transform: none;
+            }
+            50% {
+                position: fixed;
+                top: 50%;
+                left: 0;
+                width: 100vw;
+                height: auto; /* Keep original height */
+                transform: translateY(-50%);
+            }
+            100% {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                transform: none;
+            }
+        }
+        .btn.hide-text {
+            color: transparent; /* Hide text */
         }
         .product {
             border: 1px solid white;
@@ -145,20 +166,16 @@
             const btn = document.querySelector('#welcome-screen .btn');
             // Disable further clicks during animation
             btn.onclick = null;
-            // Start expansion to full width (keeping height)
-            btn.classList.add('expand-width');
+            // Hide text and start expansion
+            btn.classList.add('hide-text', 'expanding');
             setTimeout(() => {
-                // Then expand to full height
-                btn.classList.add('expand-full');
-                setTimeout(() => {
-                    // Hide welcome screen and show store
-                    document.getElementById('welcome-screen').classList.add('hidden');
-                    document.getElementById('store').classList.remove('hidden');
-                    // Reset button classes
-                    btn.classList.remove('expand-width', 'expand-full');
-                    // Re-enable click if needed, but since hidden, not necessary
-                }, 500); // Match transition duration
-            }, 500); // Match transition duration
+                // Hide welcome screen and show store
+                document.getElementById('welcome-screen').classList.add('hidden');
+                document.getElementById('store').classList.remove('hidden');
+                // Reset button classes
+                btn.classList.remove('hide-text', 'expanding');
+                // Re-enable click if needed, but since hidden, not necessary
+            }, 1000); // Match animation duration
         }
 
         function openForm(product) {
